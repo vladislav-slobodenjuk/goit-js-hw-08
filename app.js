@@ -116,6 +116,10 @@ gallery.insertAdjacentHTML('afterbegin', markup);
 
 // Opening modal by click on Img
 
+const elementsArray = [...gallery.children];
+// console.log('elementsArray:', elementsArray);
+let currentElem = '';
+
 function showElement(elem) {
   elem.classList.add('is-open');
 }
@@ -128,6 +132,10 @@ function onImgClick(evt) {
   if (evt.target.nodeName !== 'IMG') {
     return;
   }
+  // currentElem = elementsArray.indexOf(evt.target.parentNode.parentNode);
+  currentElem = evt.target.parentNode.parentNode;
+  console.log('currentElem:', currentElem);
+
   // console.log(evt);
   showElement(modal);
 
@@ -137,6 +145,7 @@ function onImgClick(evt) {
   // modalPic.setAttribute('alt', evt.target.alt);
 
   window.addEventListener('keydown', closeByKey);
+  window.addEventListener('keydown', swipeBykeys);
 }
 
 // Closing modal by click (on modalCloseBtn and modalOverlay)
@@ -159,6 +168,7 @@ function closeByClick(evt) {
     // modalPic.setAttribute('alt', '');
 
     window.removeEventListener('keydown', closeByKey);
+    window.removeEventListener('keydown', swipeBykeys);
   }
 }
 
@@ -174,5 +184,47 @@ function closeByKey(evt) {
     // modalPic.setAttribute('alt', '');
 
     window.removeEventListener('keydown', closeByKey);
+    window.removeEventListener('keydown', swipeBykeys);
+  }
+}
+
+// Changing img by keys
+
+// window.addEventListener('keydown', swipeBykeys);
+
+function swipeBykeys(evt) {
+  console.log(evt);
+  // console.log(evt.currentTarget);
+  if (evt.code === 'ArrowRight') {
+    modalPic.src =
+      currentElem.nextElementSibling.firstElementChild.firstElementChild.dataset.source;
+    // console.dir(
+    //   currentElem.nextElementSibling.firstElementChild.firstElementChild,
+    // );
+
+    modalPic.alt =
+      currentElem.nextElementSibling.firstElementChild.firstElementChild.alt;
+    // console.log(modalPic.alt);
+
+    currentElem === gallery.lastElementChild
+      ? (currentElem = currentElem.parentNode.firstElementChild)
+      : (currentElem = currentElem.nextElementSibling);
+
+    console.log(currentElem);
+    console.log(gallery.lastElementChild);
+    console.log(Boolean(currentElem === gallery.lastElementChild));
+  }
+
+  if (evt.code === 'ArrowLeft') {
+    modalPic.src =
+      currentElem.previousElementSibling.firstElementChild.firstElementChild.dataset.source;
+    // console.dir(
+    //   currentElem.previousElementSibling.firstElementChild.firstElementChild,
+    // );
+
+    modalPic.alt =
+      currentElem.previousElementSibling.firstElementChild.firstElementChild.alt;
+    // console.log(modalPic.alt);
+    currentElem = currentElem.previousElementSibling;
   }
 }
