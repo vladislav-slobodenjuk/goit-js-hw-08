@@ -66,10 +66,15 @@ const galleryItems = [
 
 const refs = {
   gallery: document.querySelector('.js-gallery'),
-  lightbox: document.querySelector('.js-lightbox'),
+  modal: document.querySelector('.js-lightbox'),
+  modalOverlay: document.querySelector('.lightbox__overlay'),
+  modalPic: document.querySelector('.lightbox__image'),
+  modalCloseBtn: document.querySelector('lightbox__button'),
 };
 
-const { gallery, lightbox } = refs;
+const { gallery, modal, modalOverlay, modalPic, modalBtnClose } = refs;
+
+// Creating gallery markup
 
 const ItemMarkup = `<li class="gallery__item">
   <a
@@ -106,5 +111,37 @@ function createItems(arr) {
 }
 
 const markup = createItems(galleryItems);
-
 gallery.insertAdjacentHTML('afterbegin', markup);
+
+// Opening modal by click on element
+
+function showElement(elem) {
+  elem.classList.add('is-open');
+}
+
+gallery.addEventListener('click', onImgClick);
+
+function onImgClick(evt) {
+  evt.preventDefault();
+
+  if (evt.target.nodeName !== 'IMG') {
+    return;
+  }
+  // console.log(evt);
+  showElement(modal);
+
+  modalPic.src = evt.target.dataset.source;
+  // modalPic.setAttribute('src', evt.target.dataset.source);
+  modalPic.alt = evt.target.dataset.alt;
+  // modalPic.setAttribute('alt', evt.target.alt);
+}
+
+// Closing modal by click on modalCloseBtn
+
+function hideElement(elem) {
+  elem.classList.remove('is-open');
+}
+
+// modal.addEventListener('click', onModalCloseBtnClick);
+
+// function onModalCloseBtnClick(evt) {}
