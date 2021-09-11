@@ -69,10 +69,11 @@ const refs = {
   modal: document.querySelector('.js-lightbox'),
   modalOverlay: document.querySelector('.lightbox__overlay'),
   modalPic: document.querySelector('.lightbox__image'),
-  modalCloseBtn: document.querySelector('lightbox__button'),
+  modalCloseBtn: document.querySelector('.lightbox__button'),
 };
 
-const { gallery, modal, modalOverlay, modalPic, modalBtnClose } = refs;
+const { gallery, modal, modalOverlay, modalPic, modalCloseBtn } = refs;
+// console.log(modalCloseBtn);
 
 // Creating gallery markup
 
@@ -113,7 +114,7 @@ function createItems(arr) {
 const markup = createItems(galleryItems);
 gallery.insertAdjacentHTML('afterbegin', markup);
 
-// Opening modal by click on element
+// Opening modal by click on Img
 
 function showElement(elem) {
   elem.classList.add('is-open');
@@ -134,14 +135,44 @@ function onImgClick(evt) {
   // modalPic.setAttribute('src', evt.target.dataset.source);
   modalPic.alt = evt.target.dataset.alt;
   // modalPic.setAttribute('alt', evt.target.alt);
+
+  window.addEventListener('keydown', closeByKey);
 }
 
-// Closing modal by click on modalCloseBtn
+// Closing modal by click (on modalCloseBtn and modalOverlay)
 
 function hideElement(elem) {
   elem.classList.remove('is-open');
 }
 
-// modal.addEventListener('click', onModalCloseBtnClick);
+modal.addEventListener('click', closeByClick);
 
-// function onModalCloseBtnClick(evt) {}
+function closeByClick(evt) {
+  // console.log(evt.target);
+  // console.log(Boolean(modalCloseBtn === evt.target));
+
+  if (evt.target === modalCloseBtn || evt.target === modalOverlay) {
+    hideElement(modal);
+    modalPic.src = '';
+    // modalPic.setAttribute('src', '');
+    modalPic.alt = '';
+    // modalPic.setAttribute('alt', '');
+
+    window.removeEventListener('keydown', closeByKey);
+  }
+}
+
+// Closing modal by click on ESC
+
+function closeByKey(evt) {
+  console.log(evt);
+  if (evt.code === 'Escape') {
+    hideElement(modal);
+    modalPic.src = '';
+    // modalPic.setAttribute('src', '');
+    modalPic.alt = '';
+    // modalPic.setAttribute('alt', '');
+
+    window.removeEventListener('keydown', closeByKey);
+  }
+}
