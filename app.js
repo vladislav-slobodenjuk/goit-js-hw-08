@@ -162,10 +162,10 @@ function closeByClick(evt) {
   }
 }
 
-// Closing modal by click on ESC
+// Closing modal by key ESC
 
 function closeByKey(evt) {
-  console.log(evt);
+  // console.log(evt);
   if (evt.code === 'Escape') {
     hideElement(modal);
     modalPic.src = '';
