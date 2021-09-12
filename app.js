@@ -127,14 +127,14 @@ function showElement(elem) {
 gallery.addEventListener('click', onImgClick);
 
 function onImgClick(evt) {
-  evt.preventDefault();
-
   if (evt.target.nodeName !== 'IMG') {
     return;
   }
-  // currentElem = elementsArray.indexOf(evt.target.parentNode.parentNode);
+  evt.preventDefault();
+
+  // indexOfCurrentElem = elementsArray.indexOf(evt.target.parentNode.parentNode);
   currentElem = evt.target.parentNode.parentNode;
-  console.log('currentElem:', currentElem);
+  // console.log('currentElem:', currentElem);
 
   // console.log(evt);
   showElement(modal);
@@ -145,7 +145,7 @@ function onImgClick(evt) {
   // modalPic.setAttribute('alt', evt.target.alt);
 
   window.addEventListener('keydown', closeByKey);
-  window.addEventListener('keydown', swipeBykeys);
+  gallery.addEventListener('keydown', swipeBykeys);
 }
 
 // Closing modal by click (on modalCloseBtn and modalOverlay)
@@ -190,41 +190,51 @@ function closeByKey(evt) {
 
 // Changing img by keys
 
-// window.addEventListener('keydown', swipeBykeys);
-
 function swipeBykeys(evt) {
-  console.log(evt);
-  // console.log(evt.currentTarget);
   if (evt.code === 'ArrowRight') {
-    modalPic.src =
-      currentElem.nextElementSibling.firstElementChild.firstElementChild.dataset.source;
-    // console.dir(
-    //   currentElem.nextElementSibling.firstElementChild.firstElementChild,
+    // console.log(
+    //   'is not lastChild:',
+    //   Boolean(currentElem !== gallery.lastElementChild),
     // );
 
+    if (currentElem !== gallery.lastElementChild) {
+      modalPic.src =
+        currentElem.nextElementSibling.firstElementChild.firstElementChild.dataset.source; //dataset.source
+
+      modalPic.alt =
+        currentElem.nextElementSibling.firstElementChild.firstElementChild.alt;
+
+      currentElem = currentElem.nextElementSibling;
+      return;
+    }
+    modalPic.src =
+      gallery.firstElementChild.firstElementChild.firstElementChild.dataset.source;
+
     modalPic.alt =
-      currentElem.nextElementSibling.firstElementChild.firstElementChild.alt;
-    // console.log(modalPic.alt);
+      gallery.firstElementChild.firstElementChild.firstElementChild.alt;
 
-    currentElem === gallery.lastElementChild
-      ? (currentElem = currentElem.parentNode.firstElementChild)
-      : (currentElem = currentElem.nextElementSibling);
-
-    console.log(currentElem);
-    console.log(gallery.lastElementChild);
-    console.log(Boolean(currentElem === gallery.lastElementChild));
+    currentElem = gallery.firstElementChild;
+    // console.log('сработал фолс', gallery.firstElementChild);
   }
 
   if (evt.code === 'ArrowLeft') {
+    if (currentElem !== gallery.firstElementChild) {
+      modalPic.src =
+        currentElem.previousElementSibling.firstElementChild.firstElementChild.dataset.source; //dataset.source
+
+      modalPic.alt =
+        currentElem.previousElementSibling.firstElementChild.firstElementChild.alt;
+
+      currentElem = currentElem.previousElementSibling;
+      return;
+    }
     modalPic.src =
-      currentElem.previousElementSibling.firstElementChild.firstElementChild.dataset.source;
-    // console.dir(
-    //   currentElem.previousElementSibling.firstElementChild.firstElementChild,
-    // );
+      gallery.lastElementChild.firstElementChild.firstElementChild.dataset.source;
 
     modalPic.alt =
-      currentElem.previousElementSibling.firstElementChild.firstElementChild.alt;
-    // console.log(modalPic.alt);
-    currentElem = currentElem.previousElementSibling;
+      gallery.lastElementChild.firstElementChild.firstElementChild.alt;
+
+    currentElem = gallery.lastElementChild;
+    // console.log('сработал фолс', gallery.lastElementChild);
   }
 }
