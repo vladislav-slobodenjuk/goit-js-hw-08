@@ -140,6 +140,31 @@ function onImgClick(evt) {
   window.addEventListener('keydown', swipeBykeys);
 }
 
+// Opening modal by keys Enter, NumpadEnter and Space
+
+window.addEventListener('keydown', onImgKeydown);
+
+function onImgKeydown(evt) {
+  if (evt.target.nodeName !== 'A') {
+    return;
+  }
+  if (
+    evt.code === 'Enter' ||
+    evt.code === 'Space' ||
+    evt.code === 'NumpadEnter'
+  ) {
+    evt.preventDefault();
+
+    showElement(modal);
+
+    modalPic.src = evt.target.firstElementChild.dataset.source;
+    modalPic.alt = evt.target.firstElementChild.dataset.alt;
+
+    window.addEventListener('keydown', closeByKey);
+    window.addEventListener('keydown', swipeBykeys);
+  }
+}
+
 // Closing modal by click (on modalCloseBtn and modalOverlay)
 
 function hideElement(elem) {
