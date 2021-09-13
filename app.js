@@ -116,10 +116,6 @@ gallery.insertAdjacentHTML('afterbegin', markup);
 
 // Opening modal by click on Img
 
-const elementsArray = [...gallery.children];
-// console.log('elementsArray:', elementsArray);
-let currentElem = '';
-
 function showElement(elem) {
   elem.classList.add('is-open');
 }
@@ -131,10 +127,6 @@ function onImgClick(evt) {
     return;
   }
   evt.preventDefault();
-
-  // indexOfCurrentElem = elementsArray.indexOf(evt.target.parentNode.parentNode);
-  currentElem = evt.target.parentNode.parentNode;
-  // console.log('currentElem:', currentElem);
 
   // console.log(evt);
   showElement(modal);
@@ -190,51 +182,20 @@ function closeByKey(evt) {
 
 // Changing img by keys
 
+const galleryItemsLength = galleryItems.length - 1;
 function swipeBykeys(evt) {
+  let index = galleryItems.findIndex(
+    ({ original }) => modalPic.src === original,
+  );
+  // console.log('index of element before swipe' ,index);
   if (evt.code === 'ArrowRight') {
-    // console.log(
-    //   'is not lastChild:',
-    //   Boolean(currentElem !== gallery.lastElementChild),
-    // );
-
-    if (currentElem !== gallery.lastElementChild) {
-      modalPic.src =
-        currentElem.nextElementSibling.firstElementChild.firstElementChild.dataset.source; //dataset.source
-
-      modalPic.alt =
-        currentElem.nextElementSibling.firstElementChild.firstElementChild.alt;
-
-      currentElem = currentElem.nextElementSibling;
-      return;
-    }
-    modalPic.src =
-      gallery.firstElementChild.firstElementChild.firstElementChild.dataset.source;
-
-    modalPic.alt =
-      gallery.firstElementChild.firstElementChild.firstElementChild.alt;
-
-    currentElem = gallery.firstElementChild;
-    // console.log('сработал фолс', gallery.firstElementChild);
+    index += 1;
+    if (index > galleryItemsLength) index = 0;
+  } else if (evt.code === 'ArrowLeft') {
+    index -= 1;
+    if (index < 0) index = galleryItemsLength;
   }
-
-  if (evt.code === 'ArrowLeft') {
-    if (currentElem !== gallery.firstElementChild) {
-      modalPic.src =
-        currentElem.previousElementSibling.firstElementChild.firstElementChild.dataset.source; //dataset.source
-
-      modalPic.alt =
-        currentElem.previousElementSibling.firstElementChild.firstElementChild.alt;
-
-      currentElem = currentElem.previousElementSibling;
-      return;
-    }
-    modalPic.src =
-      gallery.lastElementChild.firstElementChild.firstElementChild.dataset.source;
-
-    modalPic.alt =
-      gallery.lastElementChild.firstElementChild.firstElementChild.alt;
-
-    currentElem = gallery.lastElementChild;
-    // console.log('сработал фолс', gallery.lastElementChild);
-  }
+  const { original, description } = galleryItems[index];
+  modalPic.src = original;
+  modalPic.alt = description;
 }
