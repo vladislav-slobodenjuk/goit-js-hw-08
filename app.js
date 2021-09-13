@@ -145,7 +145,7 @@ function onImgClick(evt) {
   // modalPic.setAttribute('alt', evt.target.alt);
 
   window.addEventListener('keydown', closeByKey);
-  gallery.addEventListener('keydown', swipeBykeys);
+  window.addEventListener('keydown', swipeBykeys);
 }
 
 // Closing modal by click (on modalCloseBtn and modalOverlay)
